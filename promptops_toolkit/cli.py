@@ -3,7 +3,7 @@ from __future__ import annotations
 import argparse
 from pathlib import Path
 
-from .checks import build_inventory, lint_prompts, render_lint
+from .checks import build_inventory, build_review_pack, lint_prompts, render_lint
 
 
 def main(argv: list[str] | None = None) -> int:
@@ -16,6 +16,10 @@ def main(argv: list[str] | None = None) -> int:
     inventory = subparsers.add_parser("inventory", help="Generate a prompt inventory.")
     inventory.add_argument("path", type=Path)
 
+    review_pack = subparsers.add_parser("review-pack", help="Generate a prompt review package.")
+    review_pack.add_argument("path", type=Path)
+    review_pack.add_argument("--format", choices=["markdown", "json"], default="markdown")
+
     args = parser.parse_args(argv)
 
     if args.command == "lint":
@@ -25,6 +29,10 @@ def main(argv: list[str] | None = None) -> int:
 
     if args.command == "inventory":
         print(build_inventory(args.path))
+        return 0
+
+    if args.command == "review-pack":
+        print(build_review_pack(args.path, args.format))
         return 0
 
     parser.error(f"Unknown command: {args.command}")
