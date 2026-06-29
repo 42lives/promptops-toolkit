@@ -18,6 +18,7 @@ PromptOps Toolkit helps maintainers keep prompts reviewable, reusable, and safer
 
 ```bash
 python3 -m promptops_toolkit lint prompts
+python3 -m promptops_toolkit lint prompts --format json
 python3 -m promptops_toolkit inventory prompts
 python3 -m promptops_toolkit review-pack prompts --format markdown
 python3 -m promptops_toolkit review-pack prompts --format json

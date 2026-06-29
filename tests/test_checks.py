@@ -1,8 +1,10 @@
 import tempfile
 import unittest
+import json
 from pathlib import Path
 
 from promptops_toolkit.checks import build_inventory, build_review_pack, lint_prompts
+from promptops_toolkit.cli import main
 
 
 class PromptChecksTest(unittest.TestCase):
@@ -45,6 +47,15 @@ class PromptChecksTest(unittest.TestCase):
         self.assertIn("Email-like personal data found", markdown)
         self.assertIn("Review Checklist", markdown)
         self.assertIn('"status": "needs review"', json_output)
+
+    def test_lint_report_is_json_serializable(self) -> None:
+        report = lint_prompts(Path("prompts"))
+        encoded = json.dumps(report)
+
+        self.assertIn("blog-outline.md", encoded)
+
+    def test_lint_json_cli_returns_success_for_clean_prompts(self) -> None:
+        self.assertEqual(main(["lint", "prompts", "--format", "json"]), 0)
 
 
 if __name__ == "__main__":

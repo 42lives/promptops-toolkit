@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import argparse
+import json
 from pathlib import Path
 
 from .checks import build_inventory, build_review_pack, lint_prompts, render_lint
@@ -12,6 +13,7 @@ def main(argv: list[str] | None = None) -> int:
 
     lint = subparsers.add_parser("lint", help="Lint prompt markdown files.")
     lint.add_argument("path", type=Path)
+    lint.add_argument("--format", choices=["text", "json"], default="text")
 
     inventory = subparsers.add_parser("inventory", help="Generate a prompt inventory.")
     inventory.add_argument("path", type=Path)
@@ -24,7 +26,10 @@ def main(argv: list[str] | None = None) -> int:
 
     if args.command == "lint":
         report = lint_prompts(args.path)
-        print(render_lint(report))
+        if args.format == "json":
+            print(json.dumps(report, indent=2, ensure_ascii=False))
+        else:
+            print(render_lint(report))
         return 1 if report["summary"]["findings"] else 0
 
     if args.command == "inventory":
