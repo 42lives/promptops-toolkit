@@ -57,6 +57,20 @@ class PromptChecksTest(unittest.TestCase):
     def test_lint_json_cli_returns_success_for_clean_prompts(self) -> None:
         self.assertEqual(main(["lint", "prompts", "--format", "json"]), 0)
 
+    def test_safe_prompt_fixtures_pass_lint(self) -> None:
+        report = lint_prompts(Path("examples/safe-prompts"))
+
+        self.assertGreaterEqual(report["summary"]["files"], 1)
+        self.assertEqual(report["summary"]["findings"], 0)
+
+    def test_review_prompt_fixtures_show_private_data_findings(self) -> None:
+        report = lint_prompts(Path("examples/review-prompts"))
+        markdown = build_review_pack(Path("examples/review-prompts"))
+
+        self.assertGreater(report["summary"]["findings"], 0)
+        self.assertIn("Email-like personal data found", markdown)
+        self.assertIn("Missing role section", markdown)
+
 
 if __name__ == "__main__":
     unittest.main()

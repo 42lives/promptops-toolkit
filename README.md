@@ -19,6 +19,8 @@ PromptOps Toolkit helps maintainers keep prompts reviewable, reusable, and safer
 ```bash
 python3 -m promptops_toolkit lint prompts
 python3 -m promptops_toolkit lint prompts --format json
+python3 -m promptops_toolkit lint examples/safe-prompts
+python3 -m promptops_toolkit review-pack examples/review-prompts --format markdown
 python3 -m promptops_toolkit inventory prompts
 python3 -m promptops_toolkit review-pack prompts --format markdown
 python3 -m promptops_toolkit review-pack prompts --format json
@@ -59,6 +61,15 @@ Write clearly and do not invent citations.
 ## User
 Create an outline about {topic} for {audience}.
 ```
+
+## Example Fixtures
+
+The `examples/` folder contains two fixture sets:
+
+- `examples/safe-prompts/`: prompts expected to pass local lint checks.
+- `examples/review-prompts/`: intentionally unsafe prompts used to show missing role sections and private-data warnings.
+
+These fixtures help maintainers test prompt hygiene without committing real customer, account, email, or secret data.
 
 ## License
 
